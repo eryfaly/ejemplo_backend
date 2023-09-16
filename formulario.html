@@ -1,26 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Formulario de Contacto</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Client</title>
 </head>
 <body>
-    <h1>Contacto</h1>
-    <p>Por favor, completa el siguiente formulario para ponerte en contacto con nosotros:</p>
-
-    <form action="procesar_formulario.php" method="POST">
+    <h1>Create Client</h1>
+    
+    <form id="client-form">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required><br><br>
 
-        <label for="email">Correo Electrónico:</label>
-        <input type="email" id="email" name="email" required><br><br>
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" name="direccion" required><br><br>
 
-        <label for="mensaje">Mensaje:</label>
-        <textarea id="mensaje" name="mensaje" rows="4" required></textarea><br><br>
-
-        <input type="submit" value="Enviar">
+        <button type="submit">Crear Cliente</button>
     </form>
-</body>
 
+    <div id="message"></div>
+
+    <script src="script.js"></script>
+</body>
 </html>
