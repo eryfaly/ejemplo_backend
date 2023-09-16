@@ -1,36 +1,44 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Put, Delete, Post} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ClientService } from './client.service';
 
 @Controller('client')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
+
   @Get()
   getClients() {
     return this.clientService.findAll();
   }
 
- @Get(':id')
- getClientById(@Param('id', ParseIntPipe) id: number){
-  console.log(`el id a buscar es ${id}`);
-  return this.clientService.findById(id);
-}
+  @Get(':id')
+  getClientById(@Param('id', ParseIntPipe) id: number) {
+    const client = this.clientService.findById(id);
+    if (!client) {
+      throw new NotFoundException(`Client with id ${id} not found`);
+    }
+    return client;
+  }
+
+  @Post()
+  createClient(@Body() clientData: any) {
+    return this.clientService.create(clientData);
+  }
 
   @Put(':id')
-  updateClient(@Param('id', ParseIntPipe) id: number, @Body() body) {
-    console.log(`El id a actualizar es ${id}`);
-    console.log(body);
-    return this.clientService.updateClient(body, id);
+  updateClient(@Param('id', ParseIntPipe) id: number, @Body() updatedClientData: any) {
+    const updatedClient = this.clientService.updateClient(id, updatedClientData);
+    if (!updatedClient) {
+      throw new NotFoundException(`Client with id ${id} not found`);
+    }
+    return updatedClient;
   }
 
   @Delete(':id')
-  deleteById(@Param('id',ParseIntPipe) id: number){
-    console.log(`El id a eliminar es ${id}`);
-    return this.clientService.deleteClient(id);
+  deleteClient(@Param('id', ParseIntPipe) id: number) {
+    const deletedClient = this.clientService.deleteClient(id);
+    if (!deletedClient) {
+      throw new NotFoundException(`Client with id ${id} not found`);
+    }
+    return { message: `Client with id ${id} deleted successfully` };
   }
-  @Post()
-  crearClient(@Body() body) {
-    console.log(body);
-    return this.clientService.createClient(body);
-  }
-
 }

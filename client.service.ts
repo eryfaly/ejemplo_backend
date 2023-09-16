@@ -18,49 +18,39 @@ export class ClientService {
   findAll() {
     return this.clients;
   }
+
   findById(id: number) {
-    const client = this.clients.find(c => c.id === id);
-    
-    if (!client){
-        throw new NotFoundException(`Client with id ${id} does not exist`);
+    const client = this.clients.find((c) => c.id === id);
+    if (!client) {
+      throw new NotFoundException(`Client with id ${id} not found`);
     }
     return client;
   }
-  updateClient(clientBody, id){
-     //validaciones del cliente
-    const client = this.clients.find(c => c.id === id);
-    if (!client){
-        throw new NotFoundException(`Client with id ${id} does not exist`);
-    }
 
-    //logica para actualizar el cliente
-
-    return {status: 'cliente actualizado'}
-
+  create(clientData: any) {
+    const newClient = {
+      id: this.clients.length + 1, // Assign a new ID
+      ...clientData,
+    };
+    this.clients.push(newClient);
+    return newClient;
   }
 
-  deleteClient(id){
-    //validaciones del cliente
-   const client = this.clients.find(c => c.id === id);
-   if (!client){
-       throw new NotFoundException(`Client with id ${id} does not exist`);
-   }
+  updateClient(id: number, updatedClientData: any) {
+    const clientIndex = this.clients.findIndex((c) => c.id === id);
+    if (clientIndex === -1) {
+      return null; // Return null if client is not found
+    }
+    this.clients[clientIndex] = { ...this.clients[clientIndex], ...updatedClientData };
+    return this.clients[clientIndex];
+  }
 
-   //logica para eliminar el cliente
-
-   return {status: 'cliente eliminado'}
-
- }
- createClient(clientBody){
-    //validaciones del cliente
-   const client = this.clients.find(c => c.id === clientBody.id);
-   if (client){
-       throw new NotFoundException(`Client with id ${clientBody.id} exist`);
-   }
-   //logica para actualizar el cliente
-
-   return {status: 'cliente creado'}
-
-}
- 
+  deleteClient(id: number) {
+    const clientIndex = this.clients.findIndex((c) => c.id === id);
+    if (clientIndex === -1) {
+      throw new NotFoundException(`Client with id ${id} not found`);
+    }
+    const deletedClient = this.clients.splice(clientIndex, 1)[0];
+    return deletedClient;
+  }
 }
